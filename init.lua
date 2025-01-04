@@ -191,6 +191,10 @@ vim.keymap.set('n', '<C-l>', '<C-w><C-l>', { desc = 'Move focus to the right win
 vim.keymap.set('n', '<C-j>', '<C-w><C-j>', { desc = 'Move focus to the lower window' })
 vim.keymap.set('n', '<C-k>', '<C-w><C-k>', { desc = 'Move focus to the upper window' })
 
+-- ctrl+. vscode like codeaction
+-- vim.keymap.set('n', '<C-.>', '<Plug>(coc-fix-current)')
+vim.keymap.set('n', '<leader>fc', '<Plug>(coc-codeaction-cursor)')
+
 -- [[ Basic Autocommands ]]
 --  See `:help lua-guide-autocommands`
 
@@ -230,7 +234,46 @@ vim.opt.rtp:prepend(lazypath)
 -- NOTE: Here is where you install your plugins.
 require('lazy').setup({
   -- NOTE: Plugins can be added with a link (or for a github repo: 'owner/repo' link).
+
+  -- Git integration
+  'tpope/vim-fugitive',
+  -- Github integration
+  'tpope/vim-rhubarb',
+
   'tpope/vim-sleuth', -- Detect tabstop and shiftwidth automatically
+
+  -- autoformat
+  {
+    'stevearc/conform.nvim',
+    branch = 'nvim-0.9',
+    opts = {},
+    config = function()
+      require('conform').setup {
+        formatters_by_ft = {
+          lua = { 'stylua' },
+          -- Conform will run multiple formatters sequentially
+          -- python = { "ruff" },
+          -- You can customize some of the format options for the filetype (:help conform.format)
+          rust = { 'rustfmt', lsp_format = 'fallback' },
+          -- Conform will run the first available formatter
+          -- javascriptreact = { "prettier" },
+          -- typescriptreact = { "prettier" },
+        },
+        format_on_save = {
+          timeout_ms = 500,
+          lsp_format = 'fallback',
+        },
+      }
+    end,
+  },
+
+  -- File picker
+  require 'plugins.nvim_tree',
+  require 'plugins.dracula',
+  require 'plugins.diffview',
+
+  -- Not sure if required
+  -- 'numToStr/Comment.nvim',
 
   -- NOTE: Plugins can also be added by using a table,
   -- with the first argument being the link and the following
@@ -238,6 +281,9 @@ require('lazy').setup({
   --
   -- Use `opts = {}` to force a plugin to be loaded.
   --
+
+  -- Add indentation guides even on blank lines
+  'lukas-reineke/indent-blankline.nvim',
 
   -- Here is a more advanced example where we pass configuration
   -- options to `gitsigns.nvim`. This is equivalent to the following Lua:
@@ -617,8 +663,9 @@ require('lazy').setup({
       local servers = {
         -- clangd = {},
         -- gopls = {},
-        -- pyright = {},
-        -- rust_analyzer = {},
+        pyright = {},
+        ruff = {},
+        rust_analyzer = {},
         -- ... etc. See `:help lspconfig-all` for a list of all the pre-configured LSPs
         --
         -- Some languages (like typescript) have entire language plugins that can be useful:
@@ -785,7 +832,7 @@ require('lazy').setup({
           -- Accept ([y]es) the completion.
           --  This will auto-import if your LSP supports it.
           --  This will expand snippets if the LSP sent a snippet.
-          ['<C-y>'] = cmp.mapping.confirm { select = true },
+          ['<enter>'] = cmp.mapping.confirm { select = true },
 
           -- If you prefer more traditional completion keymaps,
           -- you can uncomment the following lines
@@ -930,7 +977,7 @@ require('lazy').setup({
   -- require 'kickstart.plugins.debug',
   -- require 'kickstart.plugins.indent_line',
   -- require 'kickstart.plugins.lint',
-  -- require 'kickstart.plugins.autopairs',
+  require 'kickstart.plugins.autopairs',
   -- require 'kickstart.plugins.neo-tree',
   -- require 'kickstart.plugins.gitsigns', -- adds gitsigns recommend keymaps
 
