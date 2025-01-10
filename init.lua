@@ -660,12 +660,31 @@ require('lazy').setup({
       --  - capabilities (table): Override fields in capabilities. Can be used to disable certain LSP features.
       --  - settings (table): Override the default settings passed when initializing the server.
       --        For example, to see the options for `lua_ls`, you could go to: https://luals.github.io/wiki/settings/
+
+      local rust_analyzer_settings = {}
+      if vim.env.RUST_FEATURES ~= nil then
+        local features = {}
+        print 'Using rust features:'
+        for feature in string.gmatch(vim.env.RUST_FEATURES, '[%a%d]+') do
+          print(feature)
+          features[#features + 1] = feature
+        end
+        rust_analyzer_settings = { ['rust-analyzer'] = {
+          cargo = {
+            features = features,
+          },
+        } }
+        -- print(vim.inspect(rust_analyzer_settings))
+      end
+
       local servers = {
         -- clangd = {},
         -- gopls = {},
         pyright = {},
         ruff = {},
-        rust_analyzer = {},
+        rust_analyzer = {
+          settings = rust_analyzer_settings,
+        },
         -- ... etc. See `:help lspconfig-all` for a list of all the pre-configured LSPs
         --
         -- Some languages (like typescript) have entire language plugins that can be useful:
@@ -1012,6 +1031,8 @@ require('lazy').setup({
     },
   },
 })
+
+-- vim.lsp.set_log_level 'debug'
 
 -- The line beneath this is called `modeline`. See `:help modeline`
 -- vim: ts=2 sts=2 sw=2 et
