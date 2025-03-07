@@ -242,6 +242,8 @@ require('lazy').setup({
 
   'tpope/vim-sleuth', -- Detect tabstop and shiftwidth automatically
 
+  -- Markdown preview
+  require 'plugins.markdown_preview',
   -- autoformat
   {
     'stevearc/conform.nvim',
