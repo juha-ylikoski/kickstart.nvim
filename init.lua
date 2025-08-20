@@ -503,6 +503,13 @@ require('lazy').setup({
   },
   { 'Bilal2453/luvit-meta', lazy = true },
   {
+    'qvalentin/helm-ls.nvim',
+    ft = 'helm',
+    opts = {
+      -- leave empty or see below
+    },
+  },
+  {
     -- Main LSP Configuration
     'neovim/nvim-lspconfig',
     dependencies = {
