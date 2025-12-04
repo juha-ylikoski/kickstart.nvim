@@ -242,6 +242,8 @@ require('lazy').setup({
 
   'tpope/vim-sleuth', -- Detect tabstop and shiftwidth automatically
 
+  'habamax/vim-asciidoctor',
+
   -- Markdown preview
   require 'plugins.markdown_preview',
   -- autoformat
@@ -729,6 +731,7 @@ require('lazy').setup({
             },
           },
         },
+        typos_lsp = {},
       }
 
       -- Ensure the servers and tools above are installed
